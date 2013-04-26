@@ -6,7 +6,7 @@ use utf8;
 use feature ':5.10';
 use Carp;
 
-use version; our $VERSION = qv('1.0.0');    # REMINDER: update Changes
+use version; our $VERSION = qv('1.0.1');    # REMINDER: update Changes
 
 ## no critic(ProhibitMultiplePackages Capitalization ProhibitNoWarnings)
 
@@ -163,15 +163,38 @@ for (@methods) {
         }
 
         if (ref $args[-1] eq 'CODE') {
+            my $data = $DATA[ $dbh->{$PRIVATE} ];
+            $args[$attr_idx]->{async} //= 1;
             my $cb = $args[-1];
-            $DATA[ $dbh->{$PRIVATE} ]->{call_again} = [@args[1 .. $#args-1]];
+            # The select*() functions should be called twice:
+            # - first time they'll do only prepare() and execute()
+            #   * we should return false from execute() to interrupt them
+            #     after execute(), before they'll start fetching data
+            #   * we shouldn't weaken {h} because their $sth will be
+            #     destroyed when they will be interrupted
+            # - second time they'll do only data fetching:
+            #   * they should get ready $sth instead of query param,
+            #     so they'll skip prepare()
+            #   * this $sth should be AnyEvent::DBI::MySQL::st::ready,
+            #     so they'll skip execute()
+            $data->{call_again} = [@args[1 .. $#args-1]];
             weaken($dbh);
             $args[-1] = sub {
                 my (undef, $sth, $args) = @_;
                 return if !$dbh;
-                bless $sth, 'AnyEvent::DBI::MySQL::st::ready';
-                $cb->( $dbh->$super($sth, @{$args}) );
+                if ($dbh->errstr) {
+                    $cb->();
+                }
+                else {
+                    bless $sth, 'AnyEvent::DBI::MySQL::st::ready';
+                    $cb->( $dbh->$super($sth, @{$args}) );
+                }
             };
+            if (!$args[$attr_idx]->{async}) {
+                delete $data->{call_again};
+                $cb->( $dbh->$super(@args[0 .. $#args-1]) );
+                return;
+            }
         }
         else {
             if ($args[$attr_idx]->{async}) {
@@ -201,27 +224,20 @@ sub execute {
         }
         $data->{cb} = pop @args;
         $data->{h} = $sth;
-        if ($data->{call_again}) {
-            $sth->SUPER::execute(@args);
-            # The select*() functions should be called twice:
-            # - first time they'll do only prepare() and execute()
-            #   * we should return false here to interrupt them after
-            #     execute(), before they'll start fetching data
-            #   * we shouldn't weaken {h} because their $sth will be
-            #     destroyed when they will be interrupted
-            # - second time they'll do only data fetching:
-            #   * they should get ready $sth instead of query param,
-            #     so they'll skip prepare()
-            #   * this $sth should be AnyEvent::DBI::MySQL::st::ready,
-            #     so they'll skip execute()
-            return;
-        }
         if (!$sth->{$PRIVATE_async}) {
             my $cb = delete $data->{cb};
             my $h  = delete $data->{h};
             $cb->( $sth->SUPER::execute(@args), $h );
             return;
         }
+        $sth->SUPER::execute(@args);
+        if ($sth->errstr) { # execute failed, I/O won't happens
+            my $cb = delete $data->{cb};
+            my $h  = delete $data->{h};
+            my $args=delete $data->{call_again};
+            $cb->( undef, $h, $args );
+        }
+        return;
     }
     elsif ($sth->{$PRIVATE_async}) {
         croak q{callback required};

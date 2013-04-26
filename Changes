@@ -1,5 +1,11 @@
 Revision history for AnyEvent-DBI-MySQL
 
+1.0.1	Fri Apr 26 17:31:11 EEST 2013
+	fix: select*(…,{async=>0},$cb) didn't run $cb
+	fix: async select*() didn't get correct $dbh->errstr
+	fix: async execute() didn't return execute error
+	Add more tests.
+
 1.0.0	Thu Apr 25 08:53:04 EEST 2013
 	Initial release.
 

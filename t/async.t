@@ -15,7 +15,7 @@ if ($db eq q{}) {
     plan tests => 43;
 }
 
-my $dbh = AnyEvent::DBI::MySQL->connect('dbi:mysql:'.$db, $login, $pass);
+my $dbh = AnyEvent::DBI::MySQL->connect('dbi:mysql:'.$db, $login, $pass, {PrintError=>0});
 my ($sth, $sth1, $sth2);
 my $res;
 

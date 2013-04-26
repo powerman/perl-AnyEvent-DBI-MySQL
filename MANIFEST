@@ -1,13 +1,17 @@
 Build.PL
 Changes
 lib/AnyEvent/DBI/MySQL.pm
+Makefile.PL
 MANIFEST			This list of files
+META.json
+META.yml
 README
 t/.perlcriticrc
 t/00.load.t
 t/01.export.t
 t/async.t
 t/connect.t
+t/err.t
 t/gone.t
 t/manifest.t
 t/perlcritic.t
@@ -16,6 +20,3 @@ t/pod.t
 t/prepare.t
 t/simultanous.t
 t/sync.t
-Makefile.PL
-META.yml
-META.json

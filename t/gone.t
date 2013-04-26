@@ -12,7 +12,7 @@ chomp(my ($db, $login, $pass) = `cat t/.answers`);
 if ($db eq q{}) {
     plan skip_all => 'No database provided for testing';
 } else {
-#     plan tests => 43;
+    plan tests => 6;
 }
 
 my %dbh;

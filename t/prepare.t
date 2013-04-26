@@ -12,7 +12,7 @@ chomp(my ($db, $login, $pass) = `cat t/.answers`);
 if ($db eq q{}) {
     plan skip_all => 'No database provided for testing';
 } else {
-    plan tests => 9;
+    plan tests => 8;
 }
 
 my $dbh = AnyEvent::DBI::MySQL->connect('dbi:mysql:'.$db, $login, $pass);
@@ -32,10 +32,10 @@ sub {
         ok shift, 'async insert1';
         $sth1->execute('two', sub {
             ok shift, 'async insert2';
-            is $sth1->execute('three', sub {
+            $sth1->execute('three', sub {
                 ok shift, 'async insert3';
                 NEXT();
-            }), '0E0', 'sth1 async';
+            });
         });
     });
 },
@@ -52,6 +52,7 @@ sub {
     });
 },
 sub {
+    $dbh->do('DROP TABLE Async');
     done_testing();
     exit;
 };
