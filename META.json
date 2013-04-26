@@ -1,0 +1,58 @@
+{
+   "abstract" : "Asynchronous MySQL queries",
+   "author" : [
+      "Alex Efros <powerman@cpan.org>"
+   ],
+   "dynamic_config" : 1,
+   "generated_by" : "Module::Build version 0.4003, CPAN::Meta::Converter version 2.120921",
+   "license" : [
+      "mit"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "AnyEvent-DBI-MySQL",
+   "prereqs" : {
+      "configure" : {
+         "requires" : {
+            "Module::Build" : "0"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "AnyEvent" : "0",
+            "DBD::mysql" : "0",
+            "DBI" : "0",
+            "Scalar::Util" : "0",
+            "perl" : "v5.10.0",
+            "version" : "0.77"
+         }
+      }
+   },
+   "provides" : {
+      "AnyEvent::DBI::MySQL" : {
+         "file" : "lib/AnyEvent/DBI/MySQL.pm",
+         "version" : "v1.0.0"
+      },
+      "AnyEvent::DBI::MySQL::db" : {
+         "file" : "lib/AnyEvent/DBI/MySQL.pm",
+         "version" : 0
+      },
+      "AnyEvent::DBI::MySQL::st" : {
+         "file" : "lib/AnyEvent/DBI/MySQL.pm",
+         "version" : 0
+      },
+      "AnyEvent::DBI::MySQL::st::ready" : {
+         "file" : "lib/AnyEvent/DBI/MySQL.pm",
+         "version" : 0
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "license" : [
+         "http://www.opensource.org/licenses/mit-license.php"
+      ]
+   },
+   "version" : "v1.0.0"
+}
