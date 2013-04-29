@@ -10,6 +10,7 @@ t/.perlcriticrc
 t/00.load.t
 t/01.export.t
 t/async.t
+t/async_cv.t
 t/connect.t
 t/err.t
 t/gone.t

@@ -1,5 +1,10 @@
 Revision history for AnyEvent-DBI-MySQL
 
+1.0.2	Mon Apr 29 07:02:06 EEST 2013
+	Add support for AnyEvent::CondVar as cb.
+	minor: use $h->err instead of $h->errstr
+	minor: don't send undef in 3rd param to cb
+
 1.0.1	Fri Apr 26 17:31:11 EEST 2013
 	fix: select*(…,{async=>0},$cb) didn't run $cb
 	fix: async select*() didn't get correct $dbh->errstr

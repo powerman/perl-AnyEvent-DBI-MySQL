@@ -6,7 +6,7 @@ use utf8;
 use feature ':5.10';
 use Carp;
 
-use version; our $VERSION = qv('1.0.1');    # REMINDER: update Changes
+use version; our $VERSION = qv('1.0.2');    # REMINDER: update Changes
 
 ## no critic(ProhibitMultiplePackages Capitalization ProhibitNoWarnings)
 
@@ -52,7 +52,7 @@ sub connect { ## no critic(ProhibitBuiltinHomonyms)
                 my $h  = delete $data->{h};
                 my $args=delete $data->{call_again};
                 if ($cb && $h) {
-                    $cb->( $h->mysql_async_result, $h, $args );
+                    $cb->( $h->mysql_async_result, $h, $args // ());
                 }
             },
         ),
@@ -95,7 +95,8 @@ sub DESTROY {
 sub do { ## no critic(ProhibitBuiltinHomonyms)
     my ($dbh, @args) = @_;
     local $SIG{__WARN__} = sub { (my $msg=shift)=~s/ at .*//ms; carp $msg };
-    if (ref $args[-1] eq 'CODE') {
+    my $ref = ref $args[-1];
+    if ($ref eq 'CODE' || $ref eq 'AnyEvent::CondVar') {
         my $data = $DATA[ $dbh->{$PRIVATE} ];
         if ($data->{cb}) {
             croak q{can't make more than one asynchronous query simultaneously};
@@ -156,13 +157,15 @@ for (@methods) {
         local $SIG{__WARN__} = sub { (my $msg=shift)=~s/ at .*//ms; carp $msg };
 
         my $attr_idx = $method eq 'selectall_hashref' ? 2 : 1;
-        if (ref $args[$attr_idx] eq 'CODE') {
+        my $ref = ref $args[$attr_idx];
+        if ($ref eq 'CODE' || $ref eq 'AnyEvent::CondVar') {
             splice @args, $attr_idx, 0, {};
         } else {
             $args[$attr_idx] //= {};
         }
 
-        if (ref $args[-1] eq 'CODE') {
+        $ref = ref $args[-1];
+        if ($ref eq 'CODE' || $ref eq 'AnyEvent::CondVar') {
             my $data = $DATA[ $dbh->{$PRIVATE} ];
             $args[$attr_idx]->{async} //= 1;
             my $cb = $args[-1];
@@ -182,7 +185,7 @@ for (@methods) {
             $args[-1] = sub {
                 my (undef, $sth, $args) = @_;
                 return if !$dbh;
-                if ($dbh->errstr) {
+                if ($dbh->err) {
                     $cb->();
                 }
                 else {
@@ -218,7 +221,8 @@ sub execute {
     my ($sth, @args) = @_;
     local $SIG{__WARN__} = sub { (my $msg=shift)=~s/ at .*//ms; carp $msg };
     my $data = $DATA[ $sth->{$PRIVATE} ];
-    if (ref $args[-1] eq 'CODE') {
+    my $ref = ref $args[-1];
+    if ($ref eq 'CODE' || $ref eq 'AnyEvent::CondVar') {
         if ($data->{cb}) {
             croak q{can't make more than one asynchronous query simultaneously};
         }
@@ -231,11 +235,11 @@ sub execute {
             return;
         }
         $sth->SUPER::execute(@args);
-        if ($sth->errstr) { # execute failed, I/O won't happens
+        if ($sth->err) { # execute failed, I/O won't happens
             my $cb = delete $data->{cb};
             my $h  = delete $data->{h};
             my $args=delete $data->{call_again};
-            $cb->( undef, $h, $args );
+            $cb->( undef, $h, $args // () );
         }
         return;
     }
