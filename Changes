@@ -1,5 +1,8 @@
 Revision history for AnyEvent-DBI-MySQL
 
+1.0.3   Mon May 20 19:22:41 EEST 2013
+	Improve compatibility with CPAN Testers.
+
 1.0.2	Mon Apr 29 07:02:06 EEST 2013
 	Add support for AnyEvent::CondVar as cb.
 	minor: use $h->err instead of $h->errstr
