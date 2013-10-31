@@ -1,5 +1,9 @@
 Revision history for AnyEvent-DBI-MySQL
 
+1.0.4   Thu Oct 31 19:02:30 EET 2013
+	fix: don't throw on failed connect with {RaiseError=>0}
+	fix: #88907 superfluous warning
+
 1.0.3   Mon May 20 19:22:41 EEST 2013
 	Improve compatibility with CPAN Testers.
 

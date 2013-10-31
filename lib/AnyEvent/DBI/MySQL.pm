@@ -6,7 +6,7 @@ use utf8;
 use feature ':5.10';
 use Carp;
 
-use version; our $VERSION = qv('1.0.3');    # REMINDER: update Changes
+use version; our $VERSION = qv('1.0.4');    # REMINDER: update Changes
 
 ## no critic(ProhibitMultiplePackages Capitalization ProhibitNoWarnings)
 
@@ -34,10 +34,11 @@ sub connect { ## no critic(ProhibitBuiltinHomonyms)
     $attr->{RootClass} = $class;
     $attr->{$PRIVATE} = $id;
     my $dbh = DBI->connect_cached($dsn, $user, $pass, $attr);
+    return if !$dbh;
 
     # weaken cached $dbh to have DESTROY called when user stop using it
     my $cache = $dbh->{Driver}{CachedKids};
-    for (grep {$cache->{$_} == $dbh} keys %{$cache}) {
+    for (grep {$cache->{$_} && $cache->{$_} == $dbh} keys %{$cache}) {
         weaken($cache->{$_});
     }
 

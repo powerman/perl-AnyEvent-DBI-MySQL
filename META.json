@@ -4,7 +4,7 @@
       "Alex Efros <powerman@cpan.org>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.4005, CPAN::Meta::Converter version 2.120921",
+   "generated_by" : "Module::Build version 0.4007, CPAN::Meta::Converter version 2.132510",
    "license" : [
       "mit"
    ],
@@ -33,19 +33,16 @@
    "provides" : {
       "AnyEvent::DBI::MySQL" : {
          "file" : "lib/AnyEvent/DBI/MySQL.pm",
-         "version" : "v1.0.3"
+         "version" : "v1.0.4"
       },
       "AnyEvent::DBI::MySQL::db" : {
-         "file" : "lib/AnyEvent/DBI/MySQL.pm",
-         "version" : 0
+         "file" : "lib/AnyEvent/DBI/MySQL.pm"
       },
       "AnyEvent::DBI::MySQL::st" : {
-         "file" : "lib/AnyEvent/DBI/MySQL.pm",
-         "version" : 0
+         "file" : "lib/AnyEvent/DBI/MySQL.pm"
       },
       "AnyEvent::DBI::MySQL::st::ready" : {
-         "file" : "lib/AnyEvent/DBI/MySQL.pm",
-         "version" : 0
+         "file" : "lib/AnyEvent/DBI/MySQL.pm"
       }
    },
    "release_status" : "stable",
@@ -54,10 +51,11 @@
          "http://www.opensource.org/licenses/mit-license.php"
       ]
    },
-   "version" : "v1.0.3",
+   "version" : "v1.0.4",
    "x_test_requires" : {
       "Pod::Coverage" : "0.18",
       "Test::CheckManifest" : "0.9",
+      "Test::Exception" : "0",
       "Test::More" : "0",
       "Test::Perl::Critic" : "0",
       "Test::Pod" : "1.22",
