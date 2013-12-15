@@ -6,7 +6,7 @@ use utf8;
 use feature ':5.10';
 use Carp;
 
-use version; our $VERSION = qv('1.0.4');    # REMINDER: update Changes
+use version; our $VERSION = qv('1.0.5');    # REMINDER: update Changes
 
 ## no critic(ProhibitMultiplePackages Capitalization ProhibitNoWarnings)
 

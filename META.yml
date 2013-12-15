@@ -15,7 +15,7 @@ name: AnyEvent-DBI-MySQL
 provides:
   AnyEvent::DBI::MySQL:
     file: lib/AnyEvent/DBI/MySQL.pm
-    version: v1.0.4
+    version: v1.0.5
   AnyEvent::DBI::MySQL::db:
     file: lib/AnyEvent/DBI/MySQL.pm
   AnyEvent::DBI::MySQL::st:
@@ -31,7 +31,7 @@ requires:
   version: 0.77
 resources:
   license: http://www.opensource.org/licenses/mit-license.php
-version: v1.0.4
+version: v1.0.5
 x_test_requires:
   Pod::Coverage: 0.18
   Test::CheckManifest: 0.9

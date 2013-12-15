@@ -21,7 +21,9 @@ AnyEvent::DBI::MySQL->connect("dbi:mysql:host=127.0.0.1;port=3307;database=$db",
 # passed connect shouldn't print warnings because of undefined $dbh in {CachedKids}
 AnyEvent::DBI::MySQL->connect("dbi:mysql:host=127.0.0.1;port=3306;database=$db",
     $login, $pass, {RaiseError=>0,PrintError=>0});
-is $stderr, undef, 'no warnings';
+# work around warning in EV because ./Build test run `perl -w`
+my $cleaned_stderr = join "\n", grep {!/Too late to run CHECK block/} split "\n", $stderr || q{};
+is $cleaned_stderr, q{}, 'no warnings';
 
 
 done_testing();
