@@ -6,7 +6,7 @@ use utf8;
 use feature ':5.10';
 use Carp;
 
-use version; our $VERSION = qv('1.0.5');    # REMINDER: update Changes
+use version; our $VERSION = qv('1.0.6');    # REMINDER: update Changes
 
 ## no critic(ProhibitMultiplePackages Capitalization ProhibitNoWarnings)
 
@@ -434,7 +434,7 @@ Alex Efros  C<< <powerman@cpan.org> >>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2013 Alex Efros <powerman@cpan.org>.
+Copyright 2013-2014 Alex Efros <powerman@cpan.org>.
 
 This program is distributed under the MIT (X11) License:
 L<http://www.opensource.org/licenses/mit-license.php>

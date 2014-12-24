@@ -1,5 +1,8 @@
 Revision history for AnyEvent-DBI-MySQL
 
+1.0.6   Wed Dec 24 11:47:39 EET 2014
+	Fix dependencies, closes RT #93458.
+
 1.0.5   Sun Dec 15 05:58:43 EET 2013
 	Fix tests for perl 5.16.3.
 
