@@ -58,19 +58,19 @@
    "provides" : {
       "AnyEvent::DBI::MySQL" : {
          "file" : "lib/AnyEvent/DBI/MySQL.pm",
-         "version" : "v1.0.6"
+         "version" : "v2.0.0"
       },
       "AnyEvent::DBI::MySQL::db" : {
          "file" : "lib/AnyEvent/DBI/MySQL.pm",
-         "version" : "v1.0.6"
+         "version" : "v2.0.0"
       },
       "AnyEvent::DBI::MySQL::st" : {
          "file" : "lib/AnyEvent/DBI/MySQL.pm",
-         "version" : "v1.0.6"
+         "version" : "v2.0.0"
       },
       "AnyEvent::DBI::MySQL::st::ready" : {
          "file" : "lib/AnyEvent/DBI/MySQL.pm",
-         "version" : "v1.0.6"
+         "version" : "v2.0.0"
       }
    },
    "release_status" : "stable",
@@ -85,6 +85,6 @@
          "web" : "https://github.com/powerman/perl-AnyEvent-DBI-MySQL"
       }
    },
-   "version" : "v1.0.6"
+   "version" : "v2.0.0"
 }
 

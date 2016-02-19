@@ -7,7 +7,7 @@ AnyEvent::DBI::MySQL - Asynchronous MySQL queries
 
 # VERSION
 
-This document describes AnyEvent::DBI::MySQL version v1.0.6
+This document describes AnyEvent::DBI::MySQL version v2.0.0
 
 # SYNOPSIS
 
