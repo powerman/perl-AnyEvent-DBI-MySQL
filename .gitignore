@@ -1,0 +1,8 @@
+/AnyEvent-DBI-MySQL-*
+/.build
+/_build*
+/Build
+MYMETA.*
+!META.json
+/.prove
+/tmp/
