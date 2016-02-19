@@ -42,8 +42,6 @@
             "AnyEvent" : "0",
             "DBD::mysql" : "0",
             "DBI" : "0",
-            "DBI::db" : "0",
-            "DBI::st" : "0",
             "Scalar::Util" : "0",
             "perl" : "5.010001"
          }

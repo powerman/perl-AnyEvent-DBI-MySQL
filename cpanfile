@@ -3,8 +3,6 @@ requires 'perl', '5.010001';
 requires 'AnyEvent';
 requires 'DBD::mysql';
 requires 'DBI';
-requires 'DBI::db';
-requires 'DBI::st';
 requires 'Scalar::Util';
 
 on configure => sub {
