@@ -2,20 +2,14 @@
 use warnings;
 use strict;
 use Test::More;
+use Test::Database;
 
 use AnyEvent::DBI::MySQL;
 
 
-chomp(my ($db, $login, $pass) = `cat t/.answers`);
+my $h = Test::Database->handle('mysql') or plan skip_all => '~/.test-database not configured';
 
-if ($db eq q{}) {
-    plan skip_all => 'No database provided for testing';
-} else {
-    plan tests => 11;
-}
-
-
-sub _connect { AnyEvent::DBI::MySQL->connect('dbi:mysql:'.$db, $login, $pass) }
+sub _connect { AnyEvent::DBI::MySQL->connect($h->connection_info) }
 
 my $dbh1 = _connect();
 ok($dbh1, 'connected');

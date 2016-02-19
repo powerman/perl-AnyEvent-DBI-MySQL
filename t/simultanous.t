@@ -2,22 +2,17 @@
 use warnings;
 use strict;
 use Test::More;
+use Test::Database;
 use AnyEvent;
 use Time::HiRes qw( time );
 
 use AnyEvent::DBI::MySQL;
 
 
-chomp(my ($db, $login, $pass) = `cat t/.answers`);
+my $h = Test::Database->handle('mysql') or plan skip_all => '~/.test-database not configured';
 
-if ($db eq q{}) {
-    plan skip_all => 'No database provided for testing';
-} else {
-    plan tests => 6;
-}
-
-my $dbh1 = AnyEvent::DBI::MySQL->connect('dbi:mysql:'.$db, $login, $pass);
-my $dbh2 = AnyEvent::DBI::MySQL->connect('dbi:mysql:'.$db, $login, $pass);
+my $dbh1 = AnyEvent::DBI::MySQL->connect($h->connection_info);
+my $dbh2 = AnyEvent::DBI::MySQL->connect($h->connection_info);
 my ($t, $res1, $res2);
 
 $t = time;

@@ -12,6 +12,7 @@ on configure => sub {
 };
 
 on test => sub {
+    requires 'Test::Database';
     requires 'Test::Exception';
     requires 'Test::More';
     requires 'Time::HiRes';

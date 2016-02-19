@@ -24,6 +24,8 @@ env:
 
 before_install:
   - cpanm -nq Devel::Cover::Report::Coveralls
+  - cpanm -nq DBD::mysql
+  - echo -e "driver_dsn = dbi:mysql:\nusername = root" > ~/.test-database
 install:
   - cpanm -nq --installdeps .
 script:

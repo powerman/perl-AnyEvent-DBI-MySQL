@@ -2,26 +2,21 @@
 use warnings;
 use strict;
 use Test::More;
+use Test::Database;
 use AnyEvent;
 
 use AnyEvent::DBI::MySQL;
 
 
-chomp(my ($db, $login, $pass) = `cat t/.answers`);
-
-if ($db eq q{}) {
-    plan skip_all => 'No database provided for testing';
-} else {
-    plan tests => 6;
-}
+my $h = Test::Database->handle('mysql') or plan skip_all => '~/.test-database not configured';
 
 my %dbh;
-$dbh{1} = AnyEvent::DBI::MySQL->connect('dbi:mysql:'.$db, $login, $pass);
-$dbh{2} = AnyEvent::DBI::MySQL->connect('dbi:mysql:'.$db, $login, $pass);
-$dbh{3} = AnyEvent::DBI::MySQL->connect('dbi:mysql:'.$db, $login, $pass);
-$dbh{4} = AnyEvent::DBI::MySQL->connect('dbi:mysql:'.$db, $login, $pass);
-$dbh{5} = AnyEvent::DBI::MySQL->connect('dbi:mysql:'.$db, $login, $pass);
-$dbh{6} = AnyEvent::DBI::MySQL->connect('dbi:mysql:'.$db, $login, $pass);
+$dbh{1} = AnyEvent::DBI::MySQL->connect($h->connection_info);
+$dbh{2} = AnyEvent::DBI::MySQL->connect($h->connection_info);
+$dbh{3} = AnyEvent::DBI::MySQL->connect($h->connection_info);
+$dbh{4} = AnyEvent::DBI::MySQL->connect($h->connection_info);
+$dbh{5} = AnyEvent::DBI::MySQL->connect($h->connection_info);
+$dbh{6} = AnyEvent::DBI::MySQL->connect($h->connection_info);
 my $res;
 my @t;
 
@@ -115,3 +110,6 @@ sub NEXT {
 $tests[0]->();
 
 AnyEvent->condvar->recv;
+
+
+done_testing();

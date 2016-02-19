@@ -2,6 +2,7 @@ Revision history for AnyEvent-DBI-MySQL
 
 {{$NEXT}}
 	- Switch to Dist::Milla.
+	- Use Test::Database.
 
 1.0.6   2014-12-24 11:47:39 EET
 	- Fix dependencies, closes RT #93458.

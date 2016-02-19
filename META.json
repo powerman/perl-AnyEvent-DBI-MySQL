@@ -50,6 +50,7 @@
       },
       "test" : {
          "requires" : {
+            "Test::Database" : "0",
             "Test::Exception" : "0",
             "Test::More" : "0",
             "Time::HiRes" : "0"

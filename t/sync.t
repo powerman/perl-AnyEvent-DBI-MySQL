@@ -2,19 +2,14 @@
 use warnings;
 use strict;
 use Test::More;
+use Test::Database;
 
 use AnyEvent::DBI::MySQL;
 
 
-chomp(my ($db, $login, $pass) = `cat t/.answers`);
+my $h = Test::Database->handle('mysql') or plan skip_all => '~/.test-database not configured';
 
-if ($db eq q{}) {
-    plan skip_all => 'No database provided for testing';
-} else {
-    plan tests => 44;
-}
-
-my $dbh = AnyEvent::DBI::MySQL->connect('dbi:mysql:'.$db, $login, $pass, {RaiseError=>1,PrintError=>0});
+my $dbh = AnyEvent::DBI::MySQL->connect($h->connection_info, {RaiseError=>1,PrintError=>0});
 my ($sth, $sth1, $sth2);
 my $res;
 
@@ -168,3 +163,6 @@ for (0 .. $#tests) {
     $tests[$_] = sub { &$cb; goto &NEXT; };
 }
 $tests[0]->();
+
+
+done_testing();
