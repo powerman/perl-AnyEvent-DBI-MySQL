@@ -327,9 +327,11 @@ adding C<< {async=>0} >> attribute - you don't have to rewrite code to
 remove callback function. In this case your callback will be called
 immediately after executing this synchronous query.
 
-=over
+=head2 SUPPORTED DBI METHODS
 
-=item connect(…)
+=head3 connect
+
+    $dbh = AnyEvent::DBI::MySQL->connect(...);
 
 L<DBD::mysql> support only single asynchronous query per MySQL connection.
 To make it easier to overcome this limitation provided connect()
@@ -354,45 +356,81 @@ automatically on $dbh DESTROY(), like it work in DBI.
 Also, usual limitations for cached connections apply as documented by
 L<DBI> (read: don't change $dbh configuration).
 
-=item $dbh->do(…, sub { my ($rv, $dbh) = @_; … });
+=head3 do
 
-=item $sth->execute(…, sub { my ($rv, $sth) = @_; … });
+    $dbh->do(..., sub {
+        my ($rv, $dbh) = @_;
+        ...
+    });
 
-=item $dbh->selectall_arrayref(…, sub { my ($ary_ref) = @_; … });
+=head3 execute
 
-=item $dbh->selectall_hashref(…, sub { my ($hash_ref) = @_; … });
+    $sth->execute(..., sub {
+        my ($rv, $sth) = @_;
+        ...
+    });
 
-=item $dbh->selectcol_arrayref(…, sub { my ($ary_ref) = @_; … });
+=head3 selectall_arrayref
 
-=item $dbh->selectrow_array(…, sub { my (@row_ary) = @_; … });
+    $dbh->selectall_arrayref(..., sub {
+        my ($ary_ref) = @_;
+        ...
+    });
 
-=item $dbh->selectrow_arrayref(…, sub { my ($ary_ref) = @_; … });
+=head3 selectall_hashref
 
-=item $dbh->selectrow_hashref(…, sub { my ($hash_ref) = @_; … });
+    $dbh->selectall_hashref(..., sub {
+        my ($hash_ref) = @_;
+        ...
+    });
 
-=back
+=head3 selectcol_arrayref
+
+    $dbh->selectcol_arrayref(..., sub {
+        my ($ary_ref) = @_;
+        ...
+    });
+
+=head3 selectrow_array
+
+    $dbh->selectrow_array(..., sub {
+        my (@row_ary) = @_;
+        ...
+    });
+
+=head3 selectrow_arrayref
+
+    $dbh->selectrow_arrayref(..., sub {
+        my ($ary_ref) = @_;
+        ...
+    });
+
+=head3 selectrow_hashref
+
+    $dbh->selectrow_hashref(..., sub {
+        my ($hash_ref) = @_;
+        ...
+    });
 
 
-=head1 BUGS AND LIMITATIONS
+=head1 LIMITATIONS
 
-No bugs have been reported.
-
-These DBI methods not supported yet (i.e. they work as usually - in
+These DBI methods are not supported yet (i.e. they work as usually - in
 blocking mode), mostly because they internally run several queries and
 should be completely rewritten to support non-blocking mode.
 
 NOTE: You have to provide C<< {async=>0} >> attribute to prepare() before
 using execute_array() or execute_for_fetch().
 
-    $sth->execute_array(…)
-    $sth->execute_for_fetch(…)
-    $dbh->table_info(…)
-    $dbh->column_info(…)
-    $dbh->primary_key_info(…)
-    $dbh->foreign_key_info(…)
-    $dbh->statistics_info(…)
-    $dbh->primary_key(…)
-    $dbh->tables(…)
+    $sth->execute_array
+    $sth->execute_for_fetch
+    $dbh->table_info
+    $dbh->column_info
+    $dbh->primary_key_info
+    $dbh->foreign_key_info
+    $dbh->statistics_info
+    $dbh->primary_key
+    $dbh->tables
 
 
 =head1 SEE ALSO
@@ -452,7 +490,7 @@ Alex Efros E<lt>powerman@cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2013-2014 by Alex Efros E<lt>powerman@cpan.orgE<gt>.
+This software is Copyright (c) 2013- by Alex Efros E<lt>powerman@cpan.orgE<gt>.
 
 This is free software, licensed under:
 

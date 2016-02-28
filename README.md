@@ -65,60 +65,109 @@ adding `{async=>0}` attribute - you don't have to rewrite code to
 remove callback function. In this case your callback will be called
 immediately after executing this synchronous query.
 
-- connect(…)
+## SUPPORTED DBI METHODS
 
-    [DBD::mysql](https://metacpan.org/pod/DBD::mysql) support only single asynchronous query per MySQL connection.
-    To make it easier to overcome this limitation provided connect()
-    constructor work using DBI->connect\_cached() under the hood, but it reuse
-    only inactive $dbh - i.e. one which you didn't use anymore. So, connect()
-    guarantee to not return $dbh which is already in use in your code.
-    For example, in FastCGI or Mojolicious app you can safely use connect() to
-    get own $dbh per each incoming connection; after you send response and
-    close this connection that $dbh should automatically go out of scope and
-    become inactive (you can force this by `$dbh=undef;`); after that this
-    $dbh may be returned by connect() when handling next incoming request.
-    As result you should automatically get a pool of connected $dbh which size
-    should match peak amount of simultaneously handled CGI requests.
-    You can flush that $dbh cache as documented by [DBI](https://metacpan.org/pod/DBI) at any time.
+### connect
 
-    NOTE: To implement this caching behavior this module catch DESTROY() for
-    $dbh and instead of destroying it (and calling $dbh->disconnect()) make it
-    available for next connect() call in cache. So, if you need to call
-    $dbh->disconnect() - do it manually and don't expect it to happens
-    automatically on $dbh DESTROY(), like it work in DBI.
+    $dbh = AnyEvent::DBI::MySQL->connect(...);
 
-    Also, usual limitations for cached connections apply as documented by
-    [DBI](https://metacpan.org/pod/DBI) (read: don't change $dbh configuration).
+[DBD::mysql](https://metacpan.org/pod/DBD::mysql) support only single asynchronous query per MySQL connection.
+To make it easier to overcome this limitation provided connect()
+constructor work using DBI->connect\_cached() under the hood, but it reuse
+only inactive $dbh - i.e. one which you didn't use anymore. So, connect()
+guarantee to not return $dbh which is already in use in your code.
+For example, in FastCGI or Mojolicious app you can safely use connect() to
+get own $dbh per each incoming connection; after you send response and
+close this connection that $dbh should automatically go out of scope and
+become inactive (you can force this by `$dbh=undef;`); after that this
+$dbh may be returned by connect() when handling next incoming request.
+As result you should automatically get a pool of connected $dbh which size
+should match peak amount of simultaneously handled CGI requests.
+You can flush that $dbh cache as documented by [DBI](https://metacpan.org/pod/DBI) at any time.
 
-- $dbh->do(…, sub { my ($rv, $dbh) = @\_; … });
-- $sth->execute(…, sub { my ($rv, $sth) = @\_; … });
-- $dbh->selectall\_arrayref(…, sub { my ($ary\_ref) = @\_; … });
-- $dbh->selectall\_hashref(…, sub { my ($hash\_ref) = @\_; … });
-- $dbh->selectcol\_arrayref(…, sub { my ($ary\_ref) = @\_; … });
-- $dbh->selectrow\_array(…, sub { my (@row\_ary) = @\_; … });
-- $dbh->selectrow\_arrayref(…, sub { my ($ary\_ref) = @\_; … });
-- $dbh->selectrow\_hashref(…, sub { my ($hash\_ref) = @\_; … });
+NOTE: To implement this caching behavior this module catch DESTROY() for
+$dbh and instead of destroying it (and calling $dbh->disconnect()) make it
+available for next connect() call in cache. So, if you need to call
+$dbh->disconnect() - do it manually and don't expect it to happens
+automatically on $dbh DESTROY(), like it work in DBI.
 
-# BUGS AND LIMITATIONS
+Also, usual limitations for cached connections apply as documented by
+[DBI](https://metacpan.org/pod/DBI) (read: don't change $dbh configuration).
 
-No bugs have been reported.
+### do
 
-These DBI methods not supported yet (i.e. they work as usually - in
+    $dbh->do(..., sub {
+        my ($rv, $dbh) = @_;
+        ...
+    });
+
+### execute
+
+    $sth->execute(..., sub {
+        my ($rv, $sth) = @_;
+        ...
+    });
+
+### selectall\_arrayref
+
+    $dbh->selectall_arrayref(..., sub {
+        my ($ary_ref) = @_;
+        ...
+    });
+
+### selectall\_hashref
+
+    $dbh->selectall_hashref(..., sub {
+        my ($hash_ref) = @_;
+        ...
+    });
+
+### selectcol\_arrayref
+
+    $dbh->selectcol_arrayref(..., sub {
+        my ($ary_ref) = @_;
+        ...
+    });
+
+### selectrow\_array
+
+    $dbh->selectrow_array(..., sub {
+        my (@row_ary) = @_;
+        ...
+    });
+
+### selectrow\_arrayref
+
+    $dbh->selectrow_arrayref(..., sub {
+        my ($ary_ref) = @_;
+        ...
+    });
+
+### selectrow\_hashref
+
+    $dbh->selectrow_hashref(..., sub {
+        my ($hash_ref) = @_;
+        ...
+    });
+
+# LIMITATIONS
+
+These DBI methods are not supported yet (i.e. they work as usually - in
 blocking mode), mostly because they internally run several queries and
 should be completely rewritten to support non-blocking mode.
 
 NOTE: You have to provide `{async=>0}` attribute to prepare() before
 using execute\_array() or execute\_for\_fetch().
 
-    $sth->execute_array(…)
-    $sth->execute_for_fetch(…)
-    $dbh->table_info(…)
-    $dbh->column_info(…)
-    $dbh->primary_key_info(…)
-    $dbh->foreign_key_info(…)
-    $dbh->statistics_info(…)
-    $dbh->primary_key(…)
-    $dbh->tables(…)
+    $sth->execute_array
+    $sth->execute_for_fetch
+    $dbh->table_info
+    $dbh->column_info
+    $dbh->primary_key_info
+    $dbh->foreign_key_info
+    $dbh->statistics_info
+    $dbh->primary_key
+    $dbh->tables
 
 # SEE ALSO
 
@@ -170,7 +219,7 @@ Alex Efros &lt;powerman@cpan.org>
 
 # COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2013-2014 by Alex Efros &lt;powerman@cpan.org>.
+This software is Copyright (c) 2013- by Alex Efros &lt;powerman@cpan.org>.
 
 This is free software, licensed under:
 
