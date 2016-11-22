@@ -40,23 +40,37 @@ sub connect { ## no critic(ProhibitBuiltinHomonyms)
         weaken($cache->{$_});
     }
 
+    weaken(my $weakdbh = $dbh);
+    my $io_cb; $io_cb = sub {
+        local $SIG{__WARN__} = sub { (my $msg=shift)=~s/ at .*//ms; warn "$msg\n" };
+        my $data = $DATA[$id];
+        my $cb = delete $data->{cb};
+        my $h  = delete $data->{h};
+        my $args=delete $data->{call_again};
+        if ($cb && $h) {
+            $cb->( $h->mysql_async_result, $h, $args // ());
+        }
+        else {
+            $DATA[$id] = {};
+            if ($weakdbh && $weakdbh->{mysql_auto_reconnect}) {
+                $weakdbh->ping;         # initiate reconnect
+                if ($weakdbh->ping) {   # check is reconnect was successful
+                    $DATA[ $id ] = {
+                        io => AnyEvent->io(
+                            fh      => $weakdbh->mysql_fd,
+                            poll    => 'r',
+                            cb      => $io_cb,
+                        ),
+                    };
+                }
+            }
+        }
+    };
     $DATA[ $id ] = {
         io => AnyEvent->io(
             fh      => $dbh->mysql_fd,
             poll    => 'r',
-            cb      => sub {
-                local $SIG{__WARN__} = sub { (my $msg=shift)=~s/ at .*//ms; warn "$msg\n" };
-                my $data = $DATA[$id];
-                my $cb = delete $data->{cb};
-                my $h  = delete $data->{h};
-                my $args=delete $data->{call_again};
-                if ($cb && $h) {
-                    $cb->( $h->mysql_async_result, $h, $args // ());
-                }
-                else {
-                    $DATA[$id] = {};
-                }
-            },
+            cb      => $io_cb,
         ),
     };
 
