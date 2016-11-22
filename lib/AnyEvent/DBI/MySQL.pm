@@ -53,6 +53,9 @@ sub connect { ## no critic(ProhibitBuiltinHomonyms)
                 if ($cb && $h) {
                     $cb->( $h->mysql_async_result, $h, $args // ());
                 }
+                else {
+                    $DATA[$id] = {};
+                }
             },
         ),
     };
