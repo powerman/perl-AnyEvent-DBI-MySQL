@@ -5,7 +5,7 @@ use strict;
 use utf8;
 use Carp;
 
-our $VERSION = 'v2.0.0';
+our $VERSION = 'v2.1.0';
 
 ## no critic(ProhibitMultiplePackages Capitalization ProhibitNoWarnings)
 
@@ -283,7 +283,7 @@ AnyEvent::DBI::MySQL - Asynchronous MySQL queries
 
 =head1 VERSION
 
-This document describes AnyEvent::DBI::MySQL version v2.0.0
+This document describes AnyEvent::DBI::MySQL version v2.1.0
 
 
 =head1 SYNOPSIS

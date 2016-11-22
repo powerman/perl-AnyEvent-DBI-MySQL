@@ -1,7 +1,11 @@
 Revision history for AnyEvent-DBI-MySQL
 
 {{$NEXT}}
+
+v2.1.0  2016-11-22 19:21:45 EET
 	- Reformat doc.
+	- Fix 100% CPU usage on broken connection.
+	- Experimental support for mysql_auto_reconnect=>1.
 
 v2.0.0  2016-02-19 11:14:28 EET
 	- Switch to Dist::Milla.
